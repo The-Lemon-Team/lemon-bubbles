@@ -6,6 +6,6 @@ export class AppService {
   constructor(private configService: ConfigService) {}
 
   getHello(): string {
-    return this.configService.get('DB_PORT');
+    return this.configService.get('DB_HOST');
   }
 }

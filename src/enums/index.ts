@@ -1,1 +1,2 @@
-export { ProviderEnum } from './ProviderEnum';
+export { ProviderEnum } from './Provider.enum';
+export { RepositoryEnum } from './Repository.enum';

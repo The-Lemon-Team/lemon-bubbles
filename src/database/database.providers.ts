@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { createConnection } from 'typeorm';
 
+import { Hashtag } from '../hashtag';
 import { ProviderEnum } from '../enums';
 
 export const databaseProviders = [
@@ -20,7 +21,7 @@ export const databaseProviders = [
         username,
         password,
         database,
-        entities: [],
+        entities: [Hashtag],
         synchronize: true,
       });
     },
