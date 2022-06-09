@@ -9,9 +9,9 @@ import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
+    DatabaseModule,
     HashtagModule,
     NotesModule,
-    DatabaseModule,
     ConfigModule.forRoot({
       envFilePath: '.env.local',
       isGlobal: true,

@@ -7,12 +7,13 @@ import {
   JoinTable,
 } from 'typeorm';
 
-import { Hashtag } from 'src/hashtag/entities/hashtag.entity';
+import { Hashtag } from '../../hashtag';
+import { INote } from '../../interfaces';
 
 @Entity()
-export class Note {
+export class Note implements INote {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @CreateDateColumn()
   created: string;
