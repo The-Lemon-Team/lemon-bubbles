@@ -7,10 +7,13 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+
 import { HashtagService } from './services/hashtag.service';
 import { CreateHashtagDto } from './dto/create-hashtag.dto';
 import { UpdateHashtagDto } from './dto/update-hashtag.dto';
 
+@ApiTags('hashtag')
 @Controller('hashtag')
 export class HashtagController {
   constructor(private readonly hashtagService: HashtagService) {}

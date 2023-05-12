@@ -6,6 +6,9 @@ import { AppService } from './app.service';
 import { HashtagModule } from './hashtag/hashtag.module';
 import { NotesModule } from './notes/notes.module';
 import { DatabaseModule } from './database/database.module';
+import { UsersModule } from './users/users.module';
+import { CryptModule } from './crypt';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -13,9 +16,12 @@ import { DatabaseModule } from './database/database.module';
     HashtagModule,
     NotesModule,
     ConfigModule.forRoot({
-      envFilePath: '.env.local',
+      envFilePath: '.env',
       isGlobal: true,
     }),
+    UsersModule,
+    CryptModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

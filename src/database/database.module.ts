@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { User } from '../users/entities/user.entity';
+import { Hashtag } from 'src/hashtag';
+
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({

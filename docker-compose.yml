@@ -6,8 +6,6 @@ services:
     image: mysql:5
     command: --character-set-server=utf8 --collation-server=utf8_general_ci
     restart: always
-    networks:
-      - bubbles-network
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: lemon-bubbles
@@ -19,26 +17,26 @@ services:
       retries: 120
     volumes:
       - data:/var/lib/db/data
-  main:
-    container_name: main
-    build:
-      context: .
-      target: development
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    ports:
-      - 3000:3000
-    command: npm run start:dev
-    env_file:
-      - .env.local
-    networks:
-      - bubbles-network
-    depends_on:
-      db:
-        condition: 'service_healthy'
-    links: 
-        - db
+  # main:
+  #   container_name: main
+  #   build:
+  #     context: .
+  #     target: development
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   ports:
+  #     - 3000:3000
+  #   command: npm run start:dev
+  #   env_file:
+  #     - .env.local
+  #   networks:
+  #     - bubbles-network
+  #   depends_on:
+  #     db:
+  #       condition: 'service_healthy'
+  #   links: 
+  #       - db
 networks:
   bubbles-network:
 volumes:
