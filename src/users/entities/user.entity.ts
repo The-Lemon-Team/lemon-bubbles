@@ -15,7 +15,7 @@ export class User {
   id: string;
 
   @Length(4, 40, {
-    message: 'The login must be at least 4 but not longer than 30 characters',
+    message: 'Логин должен быть не менее 4, но не длиннее 30 символов',
   })
   @Column({ unique: true })
   login: string;
@@ -27,15 +27,14 @@ export class User {
   public refreshToken?: string;
 
   @Length(6, 30, {
-    message:
-      'The password must be at least 6 but not longer than 30 characters',
+    message: 'Пароль должен быть не менее 6, но не длиннее 30 символов',
   })
-  @IsNotEmpty({ message: 'The password is required' })
+  @IsNotEmpty({ message: 'Пароль обязателен' })
   @Exclude()
   @Column()
   public password: string;
 
-  @Column()
+  @Column({ unique: true })
   @IsEmail({}, { message: 'Incorrect email' })
   public email: string;
 }

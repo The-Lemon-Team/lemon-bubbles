@@ -1,3 +1,3 @@
-export class FindUserByLoginDto {
-  login: string;
+export class FindUserByEmailDto {
+  email: string;
 }

@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 import { CryptService } from './crypt.service';
-import { jwtConstants } from '../jwtConstants';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -13,7 +12,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         const secret = configService.get('SECRET_KEY');
 
         return {
-          secretOrPrivateKey: secret,
+          secret: secret,
           signOptions: {
             expiresIn: 3600,
           },

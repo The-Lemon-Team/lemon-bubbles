@@ -29,6 +29,7 @@ export class UsersController {
   })
   @UseInterceptors(ClassSerializerInterceptor)
   create(@Body() createUserDto: CreateUserDto) {
+    console.log('createUserDto', createUserDto);
     return this.usersService.create(createUserDto);
   }
 

@@ -1,9 +1,10 @@
-import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { User } from './entities/user.entity';
 import { CryptService } from '../crypt';
+import { HttpException } from '../common/HttpException';
 
 import {
   AddRefreshTokenDto,
@@ -11,7 +12,9 @@ import {
   FindUserByIdDto,
   FindUserByLoginDto,
   FindUserByRefreshTokenDto,
+  FindUserByEmailDto,
 } from './dto';
+import { ErrorStatus } from '../enums/ErrorStatus.enum';
 
 @Injectable()
 export class UsersService {
@@ -21,17 +24,25 @@ export class UsersService {
     private readonly cryptService: CryptService,
   ) {}
 
-  async createUser({ password, login, ...createUserDto }: CreateUserDto) {
+  async createUser({
+    password,
+    login,
+    email,
+    ...createUserDto
+  }: CreateUserDto) {
     try {
-      const user = await this.userRepository.findOne({
-        login,
-      });
+      const user = email
+        ? await this.findUserByEmail({ email })
+        : await this.findUserByLogin({ login });
+
       if (user) {
         throw new HttpException(
-          'User is already exists',
+          'Такой пользователь уже сущесвует',
           HttpStatus.UNPROCESSABLE_ENTITY,
+          ErrorStatus.USER_EXISTS,
         );
       }
+
       const cryptedPassword = await this.cryptService.hashPassword(password);
 
       return this.userRepository.create({
@@ -41,8 +52,9 @@ export class UsersService {
       });
     } catch (e) {
       throw new HttpException(
-        'User is already exists',
+        'Такой пользователь уже сущесвует',
         HttpStatus.UNPROCESSABLE_ENTITY,
+        ErrorStatus.USER_EXISTS,
       );
     }
   }
@@ -61,6 +73,10 @@ export class UsersService {
 
   findUserByLogin({ login }: FindUserByLoginDto) {
     return this.userRepository.findOne({ login });
+  }
+
+  findUserByEmail({ email }: FindUserByEmailDto) {
+    return this.userRepository.findOne({ email });
   }
 
   findUserById({ id }: FindUserByIdDto): Promise<User> {

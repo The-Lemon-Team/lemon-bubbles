@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   UnauthorizedException,
   GoneException,
+  HttpStatus,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
@@ -12,6 +13,10 @@ import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { CryptService } from '../crypt';
 import { TokenRefreshDto } from './dto/token-refresh.dto';
+import { LoginByEmailDto } from './dto/login-by-email.dto';
+import { ErrorStatus } from '../enums/ErrorStatus.enum';
+import { HttpException } from '../common/HttpException';
+
 import { TokensPair } from '../interfaces/tokens-pair.interface';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 
@@ -26,11 +31,31 @@ export class AuthService {
   async signInByLogin({ login, password }: LoginDto) {
     const user = await this.userService.findUserByLogin({ login });
 
-    if (
-      !user ||
-      !(await this.cryptService.comparePassword(password, user.password))
-    ) {
-      throw new UnauthorizedException();
+    return this.addRefreshToken(user, password);
+  }
+
+  async signInByEmail({ email, password }: LoginByEmailDto) {
+    const user = await this.userService.findUserByEmail({ email });
+
+    return this.addRefreshToken(user, password);
+  }
+
+  async addRefreshToken(user: User, password: string) {
+    if (!user) {
+      throw new HttpException(
+        'Пользователь не найден',
+        HttpStatus.UNAUTHORIZED,
+        ErrorStatus.USER_NOT_FOUND,
+      );
+    }
+
+    if (!(await this.cryptService.comparePassword(password, user.password))) {
+      // console.log('пароль не вер');
+      throw new HttpException(
+        'Пароль не верный',
+        HttpStatus.UNAUTHORIZED,
+        ErrorStatus.PASSWORD,
+      );
     }
 
     const tokens = this.cryptService.createToken(user.id);
